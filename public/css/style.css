@@ -5,33 +5,15 @@ body {
   color: #F6F0ED;
   font-family: "Montserrat", sans-serif, "courrier new";
   overflow: hidden;
+  box-sizing: content-box;
+  margin: 0;
 }
-.navbar {  
+.nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 30px;
 }
-
-
-/*Logo animation */
-/* .logo {
-  animation: dezoom 1.5s forwards ease-in;
-  overflow: hidden;
-}
-@keyframes dezoom {
-  0% {
-    overflow: hidden;
-    transform: scale(60);
-    margin-top: 25%;
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-} */
-
 
 
 /* Intro */
@@ -43,6 +25,7 @@ body {
   font-size: 20px;
   font-weight: 600;
   font-family: 'Courier New', Courier, monospace;
+  text-align: right;
 }
 
 /* quotes class */
@@ -52,7 +35,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 70%;
+  max-width: 100%;
 }
 
 
@@ -72,16 +55,14 @@ body {
 
 /* Media */
 
-@media screen and (max-width: 900px) {
-  #phrase-container {
-    max-width: 80%;
-  }
+@media screen and (max-width: 1000px) {
+  
   #phrase {
-    font-size: 16px;
-    text-align: left;
+    font-size: 20px;
+    text-align: right;
   }
   #auteur {
-    font-size: 12px;
+    font-size: 16px;
   }
 
 }

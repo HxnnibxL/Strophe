@@ -25,27 +25,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   phrases = await fetchData();
 });
 
-async function generateQuote() {
+document.addEventListener("keydown", function (event) {
+  if (event.code === "Space" && phrases.length > 0) {
+    const index = Math.floor(Math.random() * phrases.length);
+    const phrase = phrases[index];
+    phraseText.textContent = phrase.Phrase;
+    phraseAuthor.textContent = phrase.Auteur;
+  }
+});
+
+// Gestionnaire d'événements pour les interactions mobiles
+document.addEventListener("touchstart", function (event) {
   if (phrases.length > 0) {
     const index = Math.floor(Math.random() * phrases.length);
     const phrase = phrases[index];
     phraseText.textContent = phrase.Phrase;
     phraseAuthor.textContent = phrase.Auteur;
   }
-}
-
-document.addEventListener("keydown", function (event) {
-  if (event.code === "Space") {
-    generateQuote();
-    handleInteraction();
-  }
 });
 
-// Gestionnaire d'événements pour les interactions mobiles
-document.addEventListener("click", function (event) {
-  generateQuote();
-  handleInteraction();
-});
 
 // Intro disappearing 
 function handleInteraction() {
@@ -62,8 +60,38 @@ function handleInteraction() {
   }
 }
 
+// Gestion des interactions clavier
+document.addEventListener("keydown", function (event) {
+  if (event.code === "Space") {
+    handleInteraction();
+  }
+});
+
+// Gestion des interactions mobiles
+document.addEventListener("touchstart", function (event) {
+  handleInteraction();
+});
+
+
+
 // Animation Intro
-var text = "Pour générer des citations, appuyez sur la touche espace.";
+function selectIntroText() {
+  var screenWidth = window.innerWidth;
+  var text;
+
+  if (screenWidth > 1024) {
+    // Texte pour les écrans de plus de 1024 pixels de large (ordinateurs)
+    text = "Pour générer des citations, appuyez sur la touche espace.";
+  } else {
+    // Texte pour les écrans de moins de 1024 pixels de large (téléphones)
+    text = "Touchez l'écran pour générer des citations.";
+  }
+
+  return text;
+}
+
+var text = selectIntroText();
+
 function typeWriter(text, i, fnCallback) {
   if (i < text.length) {
     document.getElementById("intro").innerHTML += text.charAt(i);
