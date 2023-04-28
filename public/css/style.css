@@ -55,7 +55,7 @@ body {
 
 /* Media */
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 924px) {
   
   #phrase {
     font-size: 20px;

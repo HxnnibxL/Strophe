@@ -79,11 +79,11 @@ function selectIntroText() {
   var screenWidth = window.innerWidth;
   var text;
 
-  if (screenWidth > 1024) {
-    // Texte pour les écrans de plus de 1024 pixels de large (ordinateurs)
+  if (screenWidth > 924) {
+    // Texte pour les écrans de plus de 924 pixels de large (ordinateurs)
     text = "Pour générer des citations, appuyez sur la touche espace.";
   } else {
-    // Texte pour les écrans de moins de 1024 pixels de large (téléphones)
+    // Texte pour les écrans de moins de 924 pixels de large (téléphones)
     text = "Touchez l'écran pour générer des citations.";
   }
 
