@@ -25,25 +25,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   phrases = await fetchData();
 });
 
-document.addEventListener("keydown", function (event) {
-  if (event.code === "Space" && phrases.length > 0) {
-    const index = Math.floor(Math.random() * phrases.length);
-    const phrase = phrases[index];
-    phraseText.textContent = phrase.Phrase;
-    phraseAuthor.textContent = phrase.Auteur;
-  }
-});
-
-// Gestionnaire d'événements pour les interactions mobiles
-document.addEventListener("touchstart", function (event) {
+async function generateQuote() {
   if (phrases.length > 0) {
     const index = Math.floor(Math.random() * phrases.length);
     const phrase = phrases[index];
     phraseText.textContent = phrase.Phrase;
     phraseAuthor.textContent = phrase.Auteur;
   }
+}
+
+document.addEventListener("keydown", function (event) {
+  if (event.code === "Space") {
+    generateQuote();
+    handleInteraction();
+  }
 });
 
+// Gestionnaire d'événements pour les interactions mobiles
+document.addEventListener("click", function (event) {
+  generateQuote();
+  handleInteraction();
+});
 
 // Intro disappearing 
 function handleInteraction() {
@@ -59,20 +61,6 @@ function handleInteraction() {
     phrase2.style.display = "block";
   }
 }
-
-// Gestion des interactions clavier
-document.addEventListener("keydown", function (event) {
-  if (event.code === "Space") {
-    handleInteraction();
-  }
-});
-
-// Gestion des interactions mobiles
-document.addEventListener("touchstart", function (event) {
-  handleInteraction();
-});
-
-
 
 // Animation Intro
 var text = "Pour générer des citations, appuyez sur la touche espace.";
