@@ -1,19 +1,22 @@
 // Get Xlsx quotes
 async function fetchData() {
   try {
-    const response = await fetch("/data", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    // Chemin relatif vers ton fichier statique
+    const response = await fetch("./data/quotes.json");
 
+    // Vérifie si le fichier a bien été chargé
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP : ${response.status}`);
+    }
+
+    // Convertit le contenu JSON
     return await response.json();
   } catch (error) {
-    console.error("Erreur lors de la récupération des données:", error);
+    console.error("Erreur lors de la récupération des données :", error);
     return [];
   }
 }
+
 
 const phraseContainer = document.getElementById("phrase-container");
 const phraseText = document.getElementById("phrase");
