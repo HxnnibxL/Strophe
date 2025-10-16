@@ -1,22 +1,104 @@
+// THEME: handle light/dark mode
+(function themeController() {
+  const storageKey = 'theme';
+  const root = document.documentElement;
+  const toggle = () => {
+    const current = getExplicitTheme();
+    const next = current === 'dark' ? 'light' : 'dark';
+    setExplicitTheme(next);
+    updateButton();
+  };
+
+  function getExplicitTheme() {
+    return localStorage.getItem(storageKey);
+  }
+
+  function clearExplicitTheme() {
+    localStorage.removeItem(storageKey);
+  }
+
+  function setExplicitTheme(theme) {
+    if (theme === 'light' || theme === 'dark') {
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem(storageKey, theme);
+    }
+  }
+
+  function getSystemPreference() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyThemeFromPreference() {
+    const explicit = getExplicitTheme();
+    if (explicit === 'light' || explicit === 'dark') {
+      root.setAttribute('data-theme', explicit);
+    } else {
+      root.removeAttribute('data-theme'); // fall back to CSS @media (system)
+    }
+  }
+
+  function updateButton() {
+    const button = document.getElementById('theme-toggle');
+    if (!button) return;
+    const explicit = getExplicitTheme();
+    const effective = explicit || getSystemPreference();
+    // Icon-only button: update icon via data attribute and accessibility labels
+    button.textContent = '';
+    button.setAttribute('data-icon', effective === 'dark' ? 'sun' : 'moon');
+    button.setAttribute('title', effective === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre');
+    button.setAttribute('aria-label', effective === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre');
+    button.setAttribute('aria-pressed', effective === 'dark' ? 'true' : 'false');
+  }
+
+  function onSystemChange(e) {
+    // Only react to system if user has no explicit choice
+    if (!getExplicitTheme()) {
+      applyThemeFromPreference();
+      updateButton();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    applyThemeFromPreference();
+    updateButton();
+    const btn = document.getElementById('theme-toggle');
+    if (btn) {
+      btn.addEventListener('click', toggle);
+      btn.addEventListener('contextmenu', (e) => {
+        // Right-click to reset to system preference
+        e.preventDefault();
+        clearExplicitTheme();
+        applyThemeFromPreference();
+        updateButton();
+      });
+    }
+    // Watch system preference changes
+    try {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', onSystemChange);
+    } catch (_) {
+      // Safari <14 fallback
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      if (mq.addListener) mq.addListener(onSystemChange);
+    }
+  });
+})();
+
 // Get Xlsx quotes
 async function fetchData() {
   try {
-    // Chemin relatif vers ton fichier statique
-    const response = await fetch("./data/quotes.json");
+    const response = await fetch("/data", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    });
 
-    // Vérifie si le fichier a bien été chargé
-    if (!response.ok) {
-      throw new Error(`Erreur HTTP : ${response.status}`);
-    }
-
-    // Convertit le contenu JSON
     return await response.json();
   } catch (error) {
-    console.error("Erreur lors de la récupération des données :", error);
+    console.error("Erreur lors de la récupération des données:", error);
     return [];
   }
 }
-
 
 const phraseContainer = document.getElementById("phrase-container");
 const phraseText = document.getElementById("phrase");
@@ -110,4 +192,14 @@ typeWriter(text, 0, function() {
   console.log("Dactylographie terminée !");
 });
 
+// Prevent same quote twice in a row
+let lastIndex = -1;
 
+function getRandomQuote() {
+  let index;
+  do {
+    index = Math.floor(Math.random() * phrases.length);
+  } while (index === lastIndex);
+  lastIndex = index;
+  return phrases[index];
+}
