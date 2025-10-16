@@ -106,3 +106,5 @@ function typeWriter(text, i, fnCallback) {
 typeWriter(text, 0, function() {
   console.log("Dactylographie terminée !");
 });
+
+

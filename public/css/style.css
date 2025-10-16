@@ -52,9 +52,7 @@ body {
   text-align: right;
 }
 
-
-/* Media */
-
+/* --------- Media ----------- */
 @media screen and (max-width: 924px) {
   
   #phrase {
